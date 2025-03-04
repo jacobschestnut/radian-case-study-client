@@ -2,26 +2,87 @@
 
 import TierCard from "@/components/TierCard";
 import { useState, useEffect } from "react";
+import { User } from "@/types/User";
 
 const Form = () => {
+  const [firstName, setFirstName] = useState<string>('');
+  const [middleInitial, setMiddleInitial] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [dob, setDob] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [subscriptionType, setSubscriptionType] = useState<string>("monthly");
+
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
   const [emailFocused, setEmailFocused] = useState<boolean>(false);
 
-  const [address, setAddress] = useState<string>('');
   const [autofillData, setAutofillData] = useState<any[]>([]);
   const [addressFocused, setAddressFocused] = useState<boolean>(false);
 
   const tierOptions = ['Low', 'Medium', 'High'];
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const [subscriptionType, setSubscriptionType] = useState<string>("monthly");
-
+//HANDLERS----------------------------------------------------------------------------
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setIsValidEmail(null);
   };
 
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
+  };
+
+  const handleAutofillSelection = (selectedAddress: any) => {
+    if (selectedAddress?.properties.formatted) {
+      setAddress(selectedAddress.properties.formatted);
+    }
+    setAutofillData([]);
+  };
+
+  const handleTierSelect = (value: string) => {
+    setSelectedOption(value);
+  };
+
+  const handleSubscriptionTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubscriptionType(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const userData: User = {
+      first_name: firstName,
+      middle_initial: middleInitial,
+      last_name: lastName,
+      email: email,
+      date_of_birth: new Date(dob).toISOString().split('T')[0],
+      address: address,
+      tier: selectedOption || "Low",
+      billing_period: subscriptionType,
+    };
+  
+    try {
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (!res.ok) {
+        console.error("Error creating user");
+      } else {
+        const data = await res.json();
+        console.log("User created successfully:", data);
+        alert("User created successfully!");
+      }
+    } catch (error) {
+      console.error("Error with request", error);
+    }
+  };
+
+//CUSTOM FUNCTIONS------------------------------------------------------------------------
   const verifyEmail = async (email: string) => {
     if (emailFocused) return;
 
@@ -45,16 +106,6 @@ const Form = () => {
     } catch (error) {
       console.log('Error occurred while validating the email:', error);
     }
-  };
-
-  useEffect(() => {
-    if (email && !emailFocused) {
-      verifyEmail(email);
-    }
-  }, [email, emailFocused]);
-
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
   };
 
   const fetchAutofillAddress = async (address: string) => {
@@ -82,30 +133,22 @@ const Form = () => {
     }
   };
 
+//USE EFFECTS------------------------------------------------------------------------
   useEffect(() => {
-    if (address.trim() && addressFocused) {
+    if (email && !emailFocused) {
+      verifyEmail(email);
+    }
+  }, [email, emailFocused]);
+
+  useEffect(() => {
+    if (addressFocused) {
       fetchAutofillAddress(address);
     }
   }, [address, addressFocused]);
 
-  const handleAutofillSelection = (selectedAddress: any) => {
-    if (selectedAddress?.properties.formatted) {
-      setAddress(selectedAddress.properties.formatted);
-    }
-    setAutofillData([]);
-  };
-
-  const handleSelect = (value: string) => {
-    setSelectedOption(value);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubscriptionType(e.target.value);
-  };
-
   return (
     <div className="max-w-xl mx-auto p-6">
-      <form className="space-y-4 bg-base-200 p-6 rounded-md">
+      <form className="space-y-4 bg-base-200 p-6 rounded-md" onSubmit={handleSubmit}>
         <h2 className="text-3xl font-bold">Basic Info</h2>
         <div className="divider"></div>
 
@@ -116,6 +159,7 @@ const Form = () => {
               id="firstName"
               type="text"
               name="firstName"
+              onChange={(e) => setFirstName(e.target.value)}
               required
               className="input input-bordered w-full"
               placeholder="Enter your first name"
@@ -129,6 +173,7 @@ const Form = () => {
               type="text"
               name="middleInitial"
               maxLength={1}
+              onChange={(e) => setMiddleInitial(e.target.value)}
               required
               className="input input-bordered w-full"
               placeholder="Enter your middle initial"
@@ -142,6 +187,7 @@ const Form = () => {
             id="lastName"
             type="text"
             name="lastName"
+            onChange={(e) => setLastName(e.target.value)}
             required
             className="input input-bordered w-full"
             placeholder="Enter your last name"
@@ -176,6 +222,7 @@ const Form = () => {
             type="date" 
             id="dob" 
             name="dob"
+            onChange={(e) => setDob(e.target.value)}
             required 
             className="mt-1 p-2 input w-32 rounded-md shadow-sm focus:ring-2 focus:input-bordered" 
           />
@@ -221,7 +268,7 @@ const Form = () => {
               key={option}
               value={option}
               selected={selectedOption === option}
-              onClick={handleSelect}
+              onClick={handleTierSelect}
             />
           ))}
         </div>
@@ -237,7 +284,7 @@ const Form = () => {
               name="subscription"
               value="monthly"
               checked={subscriptionType === "monthly"}
-              onChange={handleChange}
+              onChange={handleSubscriptionTypeChange}
               className="radio"
             />
             <label htmlFor="monthly" className="text-xl font-semibold">
@@ -252,7 +299,7 @@ const Form = () => {
               name="subscription"
               value="annual"
               checked={subscriptionType === "annual"}
-              onChange={handleChange}
+              onChange={handleSubscriptionTypeChange}
               className="radio"
             />
             <label htmlFor="annual" className="text-xl font-semibold">
@@ -264,6 +311,7 @@ const Form = () => {
         <div className="mt-10 flex items-center justify-center">
           <button type="submit" className="btn btn-success w-full">Submit</button>
         </div>
+
       </form>
     </div>
   );

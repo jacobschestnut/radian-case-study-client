@@ -1,6 +1,4 @@
 export type User = {
-    id: number;
-    username: string;
     first_name: string;
     middle_initial: string;
     last_name: string;
@@ -9,4 +7,4 @@ export type User = {
     address: string;
     tier: string;
     billing_period: string;
-  };
+};
