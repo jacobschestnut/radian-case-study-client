@@ -2,9 +2,12 @@
 
 import TierCard from "@/components/TierCard";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation'
 import { User } from "@/types/User";
 
 const Form = () => {
+  const router = useRouter();
+
   const [firstName, setFirstName] = useState<string>('');
   const [middleInitial, setMiddleInitial] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
@@ -76,7 +79,7 @@ const Form = () => {
         const data = await res.json();
         console.log("User created successfully:", data);
         alert("User created successfully!");
-
+        router.push('/')
       }
     } catch (error) {
       console.error("Error with request", error);
@@ -148,7 +151,7 @@ const Form = () => {
   }, [address, addressFocused]);
 
   return (
-    <div className="max-w-xl mx-auto p-6">
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 flex items-center justify-center p-6">
       <form className="space-y-4 bg-base-200 p-6 rounded-md" onSubmit={handleSubmit}>
         <h2 className="text-3xl font-bold">Basic Info</h2>
         <div className="divider"></div>

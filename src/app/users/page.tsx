@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { UserDB } from '@/types/UserDB';
 import UserCard from '@/components/UserCard';
 
 const UsersList = () => {
+  const router = useRouter();
   const [users, setUsers] = useState<UserDB[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   
   useEffect(() => {
     const fetchUsers = async () => {
@@ -19,25 +20,28 @@ const UsersList = () => {
         setUsers(data);
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     };
     
     fetchUsers();
   }, []);
   
-  if (loading) return <div>Loading...</div>;
-  if (users.length === 0) return <p>No user data</p>
-  
   return (
-    <div className="max-w-screen mx-auto p-6 flex justify-center items-start h-screen">
-      {users.map((user) => (
-        <UserCard
-          key={user.id}
-          user={user}
-        />
-      ))}
+    <div className='flex flex-col h-screen bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 max-w-screen mx-auto p-6 justify-start items-center'>
+      <div className="flex justify-center items-center">
+        {users.map((user) => (
+          <UserCard
+            key={user.id}
+            user={user}
+          />
+        ))}
+      </div>
+      <button
+        className="btn btn-outline m-10 py-10 w-100"
+        onClick={() => router.push('/form')}
+      >
+        <h3 className="text-xl text-white">New User</h3>
+      </button>
     </div>
   );
 };

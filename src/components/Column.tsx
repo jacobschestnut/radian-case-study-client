@@ -1,4 +1,4 @@
-import { DragEndEvent, useDroppable } from '@dnd-kit/core';
+import { useDroppable } from '@dnd-kit/core';
 import { Column as ColumnType } from "@/types/Column";
 import { UserDB } from "@/types/UserDB";
 
@@ -14,12 +14,11 @@ const Column = ({ column }: ColumnProps) => {
 
   return (
     <div className='flex flex-grow h-screen flex-col items-center'>
-      <h2 className="text-3xl font-bold mt-6">{column.title}</h2>
-      <div className="divider"></div>
       <div
         ref={setNodeRef}
         className={`flex flex-grow h-full w-full flex-col items-center rounded-md bg-base-400 p-8 ${isOver ? 'border' : ''}`}
       >
+        <h2 className="text-3xl font-bold mt-6">{column.title}</h2>
       </div>
     </div>
   );

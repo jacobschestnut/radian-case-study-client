@@ -70,7 +70,7 @@ const UserPage = () => {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <div className="flex justify-center items-start h-screen w-full">
+      <div className="bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 flex justify-center items-start h-screen w-full">
         <div className="flex w-full max-w-screen-xl items-center justify-between space-x-6">
           <Column key={columns[0].id} column={columns[0]} />
     
