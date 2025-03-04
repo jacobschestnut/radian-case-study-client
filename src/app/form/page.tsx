@@ -1,9 +1,9 @@
 'use client';
 
-import { BlockList } from "net";
+import TierCard from "@/components/TierCard";
 import { useState, useEffect } from "react";
 
-const Home = () => {
+const Form = () => {
   const [email, setEmail] = useState<string>('');
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
   const [emailFocused, setEmailFocused] = useState<boolean>(false);
@@ -11,6 +11,11 @@ const Home = () => {
   const [address, setAddress] = useState<string>('');
   const [autofillData, setAutofillData] = useState<any[]>([]);
   const [addressFocused, setAddressFocused] = useState<boolean>(false);
+
+  const tierOptions = ['Low', 'Medium', 'High'];
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  const [subscriptionType, setSubscriptionType] = useState<string>("monthly");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -90,9 +95,20 @@ const Home = () => {
     setAutofillData([]);
   };
 
+  const handleSelect = (value: string) => {
+    setSelectedOption(value);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubscriptionType(e.target.value);
+  };
+
   return (
     <div className="max-w-md mx-auto p-4">
       <form className="space-y-4">
+        <h2 className="text-3xl font-bold">Basic Info</h2>
+        <div className="divider"></div>
+
         <div className="flex flex-row">
           <div>
             <label htmlFor="firstName" className="text-sm font-medium">First Name</label>
@@ -161,7 +177,7 @@ const Home = () => {
             id="dob" 
             name="dob"
             required 
-            className="mt-2 p-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            className="mt-2 p-2 input w-32 rounded-md shadow-sm focus:ring-2 focus:input-bordered" 
           />
         </div>
 
@@ -196,12 +212,61 @@ const Home = () => {
           </div>
         </div>
 
-        <div>
+        <h2 className="text-3xl font-bold mt-6">Select Tier</h2>
+        <div className="divider"></div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {tierOptions.map((option) => (
+            <TierCard
+              key={option}
+              value={option}
+              selected={selectedOption === option}
+              onClick={handleSelect}
+            />
+          ))}
+        </div>
+
+        <h2 className="text-3xl font-bold mt-6">Billing Options</h2>
+        <div className="divider"></div>
+
+        <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="monthly"
+              name="subscription"
+              value="monthly"
+              checked={subscriptionType === "monthly"}
+              onChange={handleChange}
+              className="radio radio-primary"
+            />
+            <label htmlFor="monthly" className="text-xl font-semibold">
+              Monthly
+            </label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="annual"
+              name="subscription"
+              value="annual"
+              checked={subscriptionType === "annual"}
+              onChange={handleChange}
+              className="radio radio-primary"
+            />
+            <label htmlFor="annual" className="text-xl font-semibold">
+              Annual
+            </label>
+          </div>
+        </div>
+
+      </form>
+        <div className="mt-8">
           <button type="submit" className="btn btn-success">Submit</button>
         </div>
-      </form>
     </div>
   );
 };
 
-export default Home;
+export default Form;

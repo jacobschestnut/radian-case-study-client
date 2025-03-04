@@ -14,8 +14,6 @@ export async function POST(req: Request) {
     }
 
     const autoFillData = await addressAutoFillResponse.json();
-
-    console.log(autoFillData);
     
     return NextResponse.json(autoFillData);
 
