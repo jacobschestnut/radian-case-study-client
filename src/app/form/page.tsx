@@ -104,8 +104,8 @@ const Form = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <form className="space-y-4">
+    <div className="max-w-xl mx-auto p-6">
+      <form className="space-y-4 bg-base-200 p-6 rounded-md">
         <h2 className="text-3xl font-bold">Basic Info</h2>
         <div className="divider"></div>
 
@@ -118,7 +118,7 @@ const Form = () => {
               name="firstName"
               required
               className="input input-bordered w-full"
-              placeholder=""
+              placeholder="Enter your first name"
             />
           </div>
           
@@ -131,7 +131,7 @@ const Form = () => {
               maxLength={1}
               required
               className="input input-bordered w-full"
-              placeholder=""
+              placeholder="Enter your middle initial"
             />
           </div>
         </div>
@@ -144,7 +144,7 @@ const Form = () => {
             name="lastName"
             required
             className="input input-bordered w-full"
-            placeholder=""
+            placeholder="Enter your last name"
           />
         </div>
 
@@ -177,7 +177,7 @@ const Form = () => {
             id="dob" 
             name="dob"
             required 
-            className="mt-2 p-2 input w-32 rounded-md shadow-sm focus:ring-2 focus:input-bordered" 
+            className="mt-1 p-2 input w-32 rounded-md shadow-sm focus:ring-2 focus:input-bordered" 
           />
         </div>
 
@@ -202,7 +202,7 @@ const Form = () => {
                   <li
                     key={index}
                     onClick={() => handleAutofillSelection(addressItem)}
-                    className="list-row text-xs cursor-pointer hover:bg-blue-700"
+                    className="list-row text-xs cursor-pointer hover:bg-blue-600"
                   >
                     {addressItem.properties.formatted}
                   </li>
@@ -238,7 +238,7 @@ const Form = () => {
               value="monthly"
               checked={subscriptionType === "monthly"}
               onChange={handleChange}
-              className="radio radio-primary"
+              className="radio"
             />
             <label htmlFor="monthly" className="text-xl font-semibold">
               Monthly
@@ -253,7 +253,7 @@ const Form = () => {
               value="annual"
               checked={subscriptionType === "annual"}
               onChange={handleChange}
-              className="radio radio-primary"
+              className="radio"
             />
             <label htmlFor="annual" className="text-xl font-semibold">
               Annual
@@ -261,10 +261,10 @@ const Form = () => {
           </div>
         </div>
 
-      </form>
-        <div className="mt-8">
-          <button type="submit" className="btn btn-success">Submit</button>
+        <div className="mt-10 flex items-center justify-center">
+          <button type="submit" className="btn btn-success w-full">Submit</button>
         </div>
+      </form>
     </div>
   );
 };
