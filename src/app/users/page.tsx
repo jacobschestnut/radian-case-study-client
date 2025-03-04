@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { User } from '@/types/User';
+import { UserDB } from '@/types/UserDB';
+import UserCard from '@/components/UserCard';
 
 const UsersList = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserDB[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   
   useEffect(() => {
@@ -26,28 +27,17 @@ const UsersList = () => {
     fetchUsers();
   }, []);
   
-  const handleDelete = async (id: number) => {
-    const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
-    if (res.ok) {
-      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-    } else {
-      console.log('Failed to delete user');
-    }
-  };
-  
   if (loading) return <div>Loading...</div>;
   if (users.length === 0) return <p>No user data</p>
   
   return (
-    <div>
-    <ul className="flex flex-col">
-    {users.map((user: User) => (
-      <li key={user.id} className="p-2">
-      {user.username} - {user.email}
-      <button onClick={() => handleDelete(user.id)}>Delete</button>
-      </li>
-    ))}
-    </ul>
+    <div className="max-w-screen mx-auto p-6 flex justify-center items-start h-screen">
+      {users.map((user) => (
+        <UserCard
+          key={user.id}
+          user={user}
+        />
+      ))}
     </div>
   );
 };
