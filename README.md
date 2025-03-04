@@ -1,6 +1,13 @@
 ## Getting Started
 
-First, install dependencies
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd radian-case-study-client
+```
+
+2. Install dependencies
 
 ```bash
 npm install
@@ -10,7 +17,7 @@ yarn install
 pnpm install
 ```
 
-Next, run the development server:
+3. Run the development server:
 
 ```bash
 npm run dev
