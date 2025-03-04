@@ -29,8 +29,8 @@ const UserCard = ({ user }: UserCardProps) => {
         <div className="divider"></div>
 
         <div className="card-actions flex justify-between">
-          <p className="rounded-md bg-success py-4 px-8 text-lg">{user.tier}</p>
-          <p className="rounded-md bg-success py-4 px-8 text-lg">{user.billing_period}</p>
+          <p className="w-30 rounded-md bg-success py-4 px-8 text-lg flex justify-center items-center">{user.tier}</p>
+          <p className="w-30 rounded-md bg-success py-4 px-8 text-lg flex justify-center items-center">{user.billing_period}</p>
         </div>
       </div>
     </div>
