@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { DndContext, DragEndEvent } from '@dnd-kit/core';  // Import DndContext
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { UserDB } from '@/types/UserDB';
 import { Column as ColumnType } from '@/types/Column';
 import Column from '@/components/Column';
@@ -82,7 +82,7 @@ const UserPage = () => {
           <Column key={columns[1].id} column={columns[1]} />
         </div>
       </div>
-  </DndContext>
+    </DndContext>
   );
 };
 
