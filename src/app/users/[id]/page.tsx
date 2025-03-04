@@ -1,40 +1,39 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';  // Import DndContext
 import { UserDB } from '@/types/UserDB';
-import UserCard from '@/components/UserCard';
 import { Column as ColumnType } from '@/types/Column';
 import Column from '@/components/Column';
+import UserCardDraggable from '@/components/UserCardDraggable';
 
 const UserPage = () => {
-
-  const columns: ColumnType[] = [
-    {id: 'KEEP', title: 'KEEP'},
-    {id: 'DELETE', title: 'DELETE'}
-  ];
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const router = useRouter();
   const { id } = useParams();
   const [user, setUser] = useState<UserDB | null>(null);
+
+  const columns: ColumnType[] = [
+    { id: 'KEEP', title: 'KEEP' },
+    { id: 'DELETE', title: 'DELETE' }
+  ];
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    if (!over) {
+      return;
+    }
+
+    const userId = active.id as string;
+    const newStatus = over.id as string;
+
+    if (newStatus === 'DELETE') {
+      handleDelete(userId);
+    } else if (newStatus === 'KEEP') {
+      router.push('/users');
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -55,33 +54,35 @@ const UserPage = () => {
     }
   }, [id]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
     if (res.ok) {
       console.log('Deleted user');
+      router.push('/users');
     } else {
       console.log('Failed to delete user');
     }
   };
 
   if (!user) {
-    return <div>User not found</div>;
+    return <div></div>;
   }
 
   return (
-    <div className="max-w-screen mx-auto p-6 flex justify-center items-start h-screen">
-      <UserCard
-        key={user.id}
-        user={user}
-      />
-
-      {columns.map((column) => (
-        <Column
-          key={column.id}
-          column={column}
-        />
-      ))}
-    </div>
+    <DndContext onDragEnd={handleDragEnd}>
+      <div className="flex justify-center items-start h-screen w-full">
+        <div className="flex w-full max-w-screen-xl items-center justify-between space-x-6">
+          <Column key={columns[0].id} column={columns[0]} />
+    
+          <UserCardDraggable
+            key={user.id}
+            user={user}
+          />
+    
+          <Column key={columns[1].id} column={columns[1]} />
+        </div>
+      </div>
+  </DndContext>
   );
 };
 

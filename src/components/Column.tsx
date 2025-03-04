@@ -1,4 +1,5 @@
-import { Column as ColumnType } from "@/types/Column"
+import { DragEndEvent, useDroppable } from '@dnd-kit/core';
+import { Column as ColumnType } from "@/types/Column";
 import { UserDB } from "@/types/UserDB";
 
 type ColumnProps = {
@@ -6,16 +7,22 @@ type ColumnProps = {
   user?: UserDB;
 }
 
-const Column = ({ column, user }: ColumnProps) => {
-  return (
-    <div className="flex w-80 flex-col rounded-md bg-base-100 p-4">
-      <h2 className="mb-4 font-semibold">{column.title}</h2>
-      <div className="flex flex-1 flex-col gap-4">
+const Column = ({ column }: ColumnProps) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: column.id,
+  });
 
+  return (
+    <div className='flex flex-grow h-screen flex-col items-center'>
+      <h2 className="text-3xl font-bold mt-6">{column.title}</h2>
+      <div className="divider"></div>
+      <div
+        ref={setNodeRef}
+        className={`flex flex-grow h-full w-full flex-col items-center rounded-md bg-base-400 p-8 ${isOver ? 'border' : ''}`}
+      >
       </div>
     </div>
   );
 };
-
 
 export default Column;

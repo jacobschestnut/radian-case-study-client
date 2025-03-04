@@ -12,7 +12,7 @@ const Form = () => {
   const [dob, setDob] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [subscriptionType, setSubscriptionType] = useState<string>("monthly");
+  const [subscriptionType, setSubscriptionType] = useState<string>("Monthly");
 
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
   const [emailFocused, setEmailFocused] = useState<boolean>(false);
@@ -76,6 +76,7 @@ const Form = () => {
         const data = await res.json();
         console.log("User created successfully:", data);
         alert("User created successfully!");
+
       }
     } catch (error) {
       console.error("Error with request", error);
@@ -282,8 +283,8 @@ const Form = () => {
               type="radio"
               id="monthly"
               name="subscription"
-              value="monthly"
-              checked={subscriptionType === "monthly"}
+              value="Monthly"
+              checked={subscriptionType === "Monthly"}
               onChange={handleSubscriptionTypeChange}
               className="radio"
             />
@@ -297,8 +298,8 @@ const Form = () => {
               type="radio"
               id="annual"
               name="subscription"
-              value="annual"
-              checked={subscriptionType === "annual"}
+              value="Annual"
+              checked={subscriptionType === "Annual"}
               onChange={handleSubscriptionTypeChange}
               className="radio"
             />
