@@ -15,7 +15,7 @@ const Form = () => {
   const [dob, setDob] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [subscriptionType, setSubscriptionType] = useState<string>("Monthly");
+  const [subscriptionType, setSubscriptionType] = useState<string>('Monthly');
 
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
   const [emailFocused, setEmailFocused] = useState<boolean>(false);
