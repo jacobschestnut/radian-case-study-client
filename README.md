@@ -7,7 +7,7 @@ git clone <repository-url>
 cd radian-case-study-client
 ```
 
-2. Install dependencies
+2. Install dependencies:
 
 ```bash
 npm install
